@@ -50,11 +50,18 @@
 	cursor: pointer;
 }
 
+#acm_aside #schedules-list li span.disabled-action {
+	display: none;
+	color: #ddd;
+	text-decoration: none;
+}
+
 #acm_aside #schedules-list li a.remove:hover {
 	color: red;
 }
 
-#acm_aside #schedules-list li:hover a.remove {
+#acm_aside #schedules-list li:hover a.remove,
+#acm_aside #schedules-list li:hover span.disabled-action {
 	display: inline-block;
 }
 

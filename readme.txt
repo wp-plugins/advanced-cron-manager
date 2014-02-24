@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=conta
 Tags: cron, wp cron, manager, cron manager
 Requires at least: 3.6
 Tested up to: 3.8.1
-Stable tag: 1
+Stable tag: 1.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,10 +54,16 @@ It's used for action. For example if your hook is hook_name you'll need to add i
 
 == Changelog ==
 
+= 1.1 =
+* Fixed Schedules list from other plugins
+
 = 1.0 =
 * Plugin relase
 
 == Upgrade Notice ==
+
+= 1.1 =
+Fixed Schedules list from other plugins
 
 = 1.0 =
 Plugin relase

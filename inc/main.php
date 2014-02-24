@@ -31,6 +31,8 @@ class ACMmain {
 
 		$this->ajax = new ACMajax();
 
+		$this->acm_schedules = get_option('acm_schedules', array());
+
 		add_filter( 'cron_schedules', array($this, 'add_schedules_to_filter') );
 
 		$this->time_offset = get_option('gmt_offset') * 3600;
@@ -42,8 +44,7 @@ class ACMmain {
 
 	public function add_schedules_to_filter($schedules) {
 
-
-		foreach ( get_option('acm_schedules', array()) as $name => $schedule ) {
+		foreach ( $this->acm_schedules as $name => $schedule ) {
 
 			$schedules[$name] = array(
 				'interval' => $schedule['interval'],
@@ -176,10 +177,8 @@ class ACMmain {
 		foreach ($this->schedules as $name => $schedule) {
 			echo '<li id="single-schedule-'.$name.'">';
 				echo $name.' - '.$schedule['display'];
-
-				if (!in_array($name, $this->protected_schedules))
-					echo ' <a data-confirm="'.sprintf(__('Are you sure you want to delete %s schedule?', 'acm' ), $name ).'" data-schedule="'.$name.'" data-noonce="'.wp_create_nonce( 'remove_schedule_'.$name ).'" class="remove remove-schedule">Remove</a>';
-
+				echo $this->get_schedule_actions($name);
+				
 			echo'</li>';
 		}
 
@@ -188,6 +187,15 @@ class ACMmain {
 		echo '<div class="field go"><button id="enable_schedule_form" class="button-secondary">'.__('Add Schedule', 'acm').'</button></div>';
 
 		$this->display_add_schedule_form();
+
+	}
+
+	public function get_schedule_actions($name) {
+
+		if ( in_array($name, $this->protected_schedules) || !isset($this->acm_schedules[$name]) )
+			return ' <span class="disabled-action">'.__('Schedule protected', 'acm').'</span>';
+
+		return ' <a data-confirm="'.sprintf(__('Are you sure you want to delete %s schedule?', 'acm' ), $name ).'" data-schedule="'.$name.'" data-noonce="'.wp_create_nonce( 'remove_schedule_'.$name ).'" class="remove remove-schedule">Remove</a>';
 
 	}
 
