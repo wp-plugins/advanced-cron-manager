@@ -22,9 +22,9 @@ Plugin is using AJAX request so you'll need enabled Javascript in order to use i
 
 **Informations about WP Cron**
 
-Please remember - after deactivation of this plugin added Schedules will be not available. Added Tasks will still work.
+Please remember - after deactivation of this plugin added Schedules will be not available. Added Tasks will still work unless they use your custom schedule.
 
-Important - WordPress Cron is depended on the User. WP Cron fires only on the page visit so it can be not accurate.
+Important - WordPress Cron is depended on the User. WP Cron fires only on the page visit so it can be inaccurate.
 
 **Additional informations**
 
