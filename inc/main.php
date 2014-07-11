@@ -129,6 +129,7 @@ class ACMmain {
 			echo '<div id="notif-schedule-removed" style="display: none;" class="updated"><p><strong>'.__('Schedule removed successfully.', 'acm').'</strong></p></div>';
 			echo '<div id="notif-task-added" style="display: none;" class="updated"><p><strong>'.__('Task added successfully.', 'acm').'</strong></p></div>';
 			echo '<div id="notif-task-removed" style="display: none;" class="updated"><p><strong>'.__('Task removed successfully.', 'acm').'</strong></p></div>';
+			echo '<div id="notif-task-executed" style="display: none;" class="updated"><p><strong>'.__('Task executed successfully.', 'acm').'</strong></p></div>';
 		echo '</div>';
 
 	}
@@ -237,6 +238,7 @@ class ACMmain {
 					<th scope="col" id="schedule" class="manage-column column-schedule"><span><?php _e('Schedule', 'acm'); ?></span></th>
 					<th scope="col" id="args" class="manage-column column-args"><span><?php _e('Arguments', 'acm'); ?></span></th>
 					<th scope="col" id="next" class="manage-column column-next"><span><?php _e('Next execution', 'acm'); ?></span></th>
+					<th scope="col" id="next" class="manage-column column-next"><span><?php _e('Action', 'acm'); ?></span></th>
 				</tr>
 			</thead>
 
@@ -246,6 +248,7 @@ class ACMmain {
 					<th scope="col" id="schedule" class="manage-column column-schedule"><span><?php _e('Schedule', 'acm'); ?></span></th>
 					<th scope="col" id="args" class="manage-column column-args"><span><?php _e('Arguments', 'acm'); ?></span></th>
 					<th scope="col" id="next" class="manage-column column-next"><span><?php _e('Next execution', 'acm'); ?></span></th>
+					<th scope="col" id="next" class="manage-column column-next"><span><?php _e('Action', 'acm'); ?></span></th>
 				</tr>
 			</tfoot>
 
@@ -276,6 +279,7 @@ class ACMmain {
 					echo '</td>';
 					echo '<td class="column-args">'.acm_get_cron_arguments($cron['cron']['args']).'</td>';
 					echo '<td class="column-next" data-timestamp="'.$timestamp.'">'.acm_get_next_cron_execution($timestamp).'</td>';
+					echo '<td class="column-action"><a class="execute-task button-secondary" data-task="'.$cron['hook'].'" data-noonce="'.wp_create_nonce('execute_task_'.$cron['hook']).'">'.__('Execute', 'acm').'</a></td>';
 				echo '</tr>';
 
 			}
@@ -292,7 +296,7 @@ class ACMmain {
 		$alternate = ($alternate == '') ? 'alternate' : '';
 		
 		echo '<tr id="add_task_row" class="'.$alternate.'">';
-			echo '<td colspan="4">';
+			echo '<td colspan="5">';
 				echo '<button id="show_task_form" class="button-secondary">'.__('Add Task', 'acm').'</button>';
 			echo '</td>';
 		echo '</tr>';
@@ -323,7 +327,7 @@ class ACMmain {
 					<a id="add_argument_input" class="button-secondary"><?php _e('Add Argument', 'acm'); ?></a>
 				</td>
 
-				<td>
+				<td colspan="2">
 					<a id="add-task" name="add-task" data-noonce="<?php echo wp_create_nonce('add_task'); ?>" class="button-primary"><?php _e('Add task', 'acm'); ?></a>
 				</td>
 

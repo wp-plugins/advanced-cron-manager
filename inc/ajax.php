@@ -12,6 +12,7 @@ class ACMajax {
 
 		add_action('wp_ajax_add_task', array($this, 'add_task'));
 		add_action('wp_ajax_remove_task', array($this, 'remove_task'));
+		add_action('wp_ajax_execute_task', array($this, 'execute_task'));
 
 	}
 
@@ -139,6 +140,7 @@ class ACMajax {
 			$table .= '</td>';
 			$table .= '<td class="column-args">'.acm_get_cron_arguments($args).'</td>';
 			$table .= '<td class="column-next">'.acm_get_next_cron_execution($timestamp+$wptime_offset).'</td>';
+			$table .= '<td class="column-next"><a id="execute_task" data-task="'.$hook.'" class="button-secondary">'.__('Execute', 'acm').'</a></td>';
 		$table .= '</tr>';
 
 		die( json_encode( array('status' => 'success', 'table' => $table, 'timestamp' => $timestamp ) ) );
@@ -164,6 +166,24 @@ class ACMajax {
 		wp_unschedule_event( $timestamp, $params['task'], $args );
 
 		die( json_encode( array('status' => 'success', 'task' => $params['task'], 'info' => '<td colspan="4">'.__('Removed.', 'acm').'</td>', 'hash' => $hash ) ) );
+
+	}
+
+	public function execute_task() {
+
+		$params = $_REQUEST;
+
+		// Return error when noonce doesn't match
+		if ( !wp_verify_nonce($params['noonce'], 'execute_task_'.$params['task']) )
+			die( json_encode( array('status' => 'error', 'details' => __('Sorry, wrong noonce.', 'acm')) ) );
+
+		ob_start();
+
+		do_action($params['task']);
+		
+		ob_end_clean();
+
+		die( json_encode( array('status' => 'success') ) );
 
 	}
 

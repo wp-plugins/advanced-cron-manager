@@ -184,8 +184,6 @@ jQuery(document).ready(function($) {
 			
 			var ret = $.parseJSON(response);  
 
-			alert(ret.hash);
-
 			if (ret.status == 'success') {
 
 				// Show notification
@@ -195,6 +193,39 @@ jQuery(document).ready(function($) {
 				$('tr.cron-' + ret.hash + ' > td').slideUp('slow', function() {
 					$('tr.cron-' + ret.hash).html(ret.info);
 				});
+
+			} else if (ret.status == 'error') {
+
+				// Show error
+				$("#notif-flex > p >strong").html(ret.details);
+				$("#notif-flex").slideDown('slow').delay(3000).slideUp('slow');
+
+			}
+
+		});
+
+	});
+
+
+
+	// Execute task AJAX
+
+	$( ".execute-task" ).live('click', function() {
+
+		var data = {
+			action: 'execute_task',
+			task: $(this).data('task'),
+			noonce: $(this).data('noonce')
+		};
+
+		$.post(ajaxurl, data, function(response) {
+			
+			var ret = $.parseJSON(response);  
+
+			if (ret.status == 'success') {
+
+				// Show notification
+				$("#notif-task-executed").slideDown('slow').delay(3000).slideUp('slow');
 
 			} else if (ret.status == 'error') {
 

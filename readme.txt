@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=conta
 Tags: cron, wp cron, manager, cron manager
 Requires at least: 3.6
 Tested up to: 3.9.1
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,7 @@ This plugin allow you to manage WP Cron tasks:
 * deleting tasks and schedules
 * adding tasks and schedules
 
-Plugin is using AJAX request so you'll need enabled Javascript in order to use it.
+Plugin use AJAX request so you'll need enabled Javascript in order to use it.
 
 **Informations about WP Cron**
 
@@ -54,6 +54,11 @@ It's used for action. For example if your hook is hook_name you'll need to add i
 
 == Changelog ==
 
+= 1.2 =
+* Readme improvement
+* Added execution button
+* Removed debug alert
+
 = 1.1 =
 * Fixed Schedules list from other plugins
 
@@ -61,6 +66,9 @@ It's used for action. For example if your hook is hook_name you'll need to add i
 * Plugin relase
 
 == Upgrade Notice ==
+
+= 1.2 =
+Removed debug alert and added execution button
 
 = 1.1 =
 Fixed Schedules list from other plugins
