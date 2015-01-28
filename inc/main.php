@@ -62,6 +62,9 @@ class ACMmain {
 		if( 'tools_page_acm' != $hook )
 	        return;
 
+	    wp_enqueue_style('thickbox');
+		wp_enqueue_script('thickbox');
+
 	    wp_enqueue_script( 'acm_scripts', ACM_URL.'assets/js/admin.js', array('jquery'), 1, true );
 	    wp_enqueue_script( 'acm_ajax_scripts', ACM_URL.'assets/js/ajax.js', array('jquery'), 1, true );
 	    wp_enqueue_style( 'acm_style', ACM_URL.'assets/css/style.css' );
@@ -158,6 +161,13 @@ class ACMmain {
 		echo	'</div>
 			</div>';
 
+		echo '<div id="popslide" class="postbox ">
+				<h3>'.__('Check this out!', 'acm').'</h3>
+				<div class="inside">';
+					$this->display_popslide_widget();
+		echo	'</div>
+			</div>';
+
 	}
 
 	public function display_informations_widget() {
@@ -169,6 +179,16 @@ class ACMmain {
 		echo '<p>';
 			_e('Important - WordPress Cron is depended on the User. WP Cron fires <strong>only on the page visit</strong> so it can be not accurate.', 'acm');
 		echo '</p>';
+
+	}
+
+	public function display_popslide_widget() {
+
+		echo '<p>';
+			_e('Did you ever searched for beautiful minimalistic and non aggressive popup?', 'acm');
+		echo '</p>';
+
+		echo '<a href=/wp-admin/plugin-install.php?tab=plugin-information&amp;plugin=popslide&amp;TB_iframe=true&amp;width=800&amp;height=600" class="thickbox button-primary" aria-label="'.__('Install Popslide', 'acm').'" data-title="Popslide">'.__('Try Popslide!', 'acm').'</a>';
 
 	}
 

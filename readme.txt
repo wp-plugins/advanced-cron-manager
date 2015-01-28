@@ -3,8 +3,8 @@ Contributors: Kubitomakita
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=contact%40jmikita%2ecom&lc=US&item_name=Advanced%20Cron%20Manager&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: cron, wp cron, manager, cron manager
 Requires at least: 3.6
-Tested up to: 3.9.1
-Stable tag: 1.2
+Tested up to: 4.1
+Stable tag: 1.3
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,12 @@ It's used for action. For example if your hook is hook_name you'll need to add i
 1. Plugin control panel
 
 == Changelog ==
+
+= 1.3 =
+* Added promo metabox
+* WordPress 4.1 comatybility check
+* Updated translation
+* Added plugin icon
 
 = 1.2 =
 * Readme improvement
