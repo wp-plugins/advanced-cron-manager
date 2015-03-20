@@ -164,7 +164,7 @@ jQuery(document).ready(function($) {
 
 	// Remove task AJAX
 
-	$( ".remove-task" ).live('click', function() {
+	$( '.remove-task' ).on('click', function() {
 
 		if ( !confirm($(this).data('confirm')) ) {
 			return false;
@@ -215,8 +215,11 @@ jQuery(document).ready(function($) {
 		var data = {
 			action: 'execute_task',
 			task: $(this).data('task'),
+			args: $(this).data('args'),
 			noonce: $(this).data('noonce')
 		};
+
+		console.log(data);
 
 		$.post(ajaxurl, data, function(response) {
 			

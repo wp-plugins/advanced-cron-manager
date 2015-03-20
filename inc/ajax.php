@@ -140,7 +140,7 @@ class ACMajax {
 			$table .= '</td>';
 			$table .= '<td class="column-args">'.acm_get_cron_arguments($args).'</td>';
 			$table .= '<td class="column-next">'.acm_get_next_cron_execution($timestamp+$wptime_offset).'</td>';
-			$table .= '<td class="column-next"><a id="execute_task" data-task="'.$hook.'" class="button-secondary">'.__('Execute', 'acm').'</a></td>';
+			$table .= '<td class="column-next"><a id="execute_task" data-task="'.$hook.'" data-noonce="'.wp_create_nonce('execute_task_'.$hook).'" data-args="'.implode(',', $args).'" class="button-secondary">'.__('Execute', 'acm').'</a></td>';
 		$table .= '</tr>';
 
 		die( json_encode( array('status' => 'success', 'table' => $table, 'timestamp' => $timestamp ) ) );
@@ -179,7 +179,7 @@ class ACMajax {
 
 		ob_start();
 
-		do_action($params['task']);
+		do_action_ref_array($params['task'], $params['args']);
 		
 		ob_end_clean();
 

@@ -299,7 +299,7 @@ class ACMmain {
 					echo '</td>';
 					echo '<td class="column-args">'.acm_get_cron_arguments($cron['cron']['args']).'</td>';
 					echo '<td class="column-next" data-timestamp="'.$timestamp.'">'.acm_get_next_cron_execution($timestamp).'</td>';
-					echo '<td class="column-action"><a class="execute-task button-secondary" data-task="'.$cron['hook'].'" data-noonce="'.wp_create_nonce('execute_task_'.$cron['hook']).'">'.__('Execute', 'acm').'</a></td>';
+					echo '<td class="column-action"><a class="execute-task button-secondary" data-task="'.$cron['hook'].'" data-noonce="'.wp_create_nonce('execute_task_'.$cron['hook']).'" data-args="'.implode(',', $cron['cron']['args']).'">'.__('Execute', 'acm').'</a></td>';
 				echo '</tr>';
 
 			}
