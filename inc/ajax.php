@@ -179,7 +179,11 @@ class ACMajax {
 
 		ob_start();
 
-		do_action_ref_array($params['task'], $params['args']);
+		if ( isset( $params['args'] ) && ! empty( $params['args'] ) ) {
+			do_action_ref_array( $params['task'], $params['args'] );
+		} else {
+			do_action( $params['task'] );
+		}
 		
 		ob_end_clean();
 
