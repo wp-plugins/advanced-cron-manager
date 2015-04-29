@@ -4,13 +4,19 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=conta
 Tags: cron, wp cron, manager, cron manager
 Requires at least: 3.6
 Tested up to: 4.2
-Stable tag: 1.3.2
+Stable tag: 1.4
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Advanced manager for WordPress Cron tasks and schedules. Adding, removing and viewing with a few clicks. 
 
 == Description ==
+
+**PRO version now available!**
+
+Log cron executions easly. Until 1 June 2015 -$5 off!
+
+**Advanced Cron Manager**
 
 This plugin allow you to manage WP Cron tasks:
 
@@ -53,6 +59,11 @@ It's used for action. For example if your hook is hook_name you'll need to add i
 1. Plugin control panel
 
 == Changelog ==
+
+= 1.4 =
+* Added hooks for PRO version
+* Removed PHP closing tags
+* Added settings widget
 
 = 1.3.2 =
 * Fixed arguments passed to the action on AJAX request

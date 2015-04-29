@@ -12,6 +12,8 @@ class ACMmain {
 	public $crons = array();
 	public $schedules = array();
 
+	private $settings_array = array();
+
 	public $protected_crons = array(
 			'wp_maybe_auto_update',
 			'wp_version_check',
@@ -33,12 +35,21 @@ class ACMmain {
 
 		$this->acm_schedules = get_option('acm_schedules', array());
 
+		$this->settings = get_option( 'acm_settings', array(
+			'log'        => false,
+			'keep_in_db' => 100,
+		) );
+
 		add_filter( 'cron_schedules', array($this, 'add_schedules_to_filter') );
 
 		$this->time_offset = get_option('gmt_offset') * 3600;
 		
 		add_action('admin_menu', array($this, 'add_menu_page'));
 		add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts_and_styles'));
+
+		if ( class_exists( 'ACMPRO' ) ) {
+			$acm_pro = new ACMPRO( $this );
+		}
 
 	}
 
@@ -133,6 +144,8 @@ class ACMmain {
 			echo '<div id="notif-task-added" style="display: none;" class="updated"><p><strong>'.__('Task added successfully.', 'acm').'</strong></p></div>';
 			echo '<div id="notif-task-removed" style="display: none;" class="updated"><p><strong>'.__('Task removed successfully.', 'acm').'</strong></p></div>';
 			echo '<div id="notif-task-executed" style="display: none;" class="updated"><p><strong>'.__('Task executed successfully.', 'acm').'</strong></p></div>';
+			echo '<div id="notif-settings-saved" style="display: none;" class="updated"><p><strong>'.__('Settings saved successfully.', 'acm').'</strong></p></div>';
+			echo '<div id="notif-license-deactivated" style="display: none;" class="updated"><p><strong>'.__('License deactivated successfully.', 'acm').'</strong></p></div>';
 		echo '</div>';
 
 	}
@@ -142,6 +155,20 @@ class ACMmain {
 		$this->schedules = wp_get_schedules();
 
 		$this->display_cron_table();
+
+		if ( ! class_exists( 'ACMPRO' ) ) {
+
+			echo '<div id="acm-pro" class="postbox ">
+					<h3>'.__('Logs', 'acm').'</h3>
+					<div class="inside placeholder-div">';
+						echo '<h3><a href="http://underdev.it/downloads/advanced-cron-manager-pro/" target="_blank">' . __( 'Log cron executions with Advanced Cron Manager PRO', 'acm' ) . '</a></h3>';
+						echo '<p>' . __( 'Until 1st June 2015 only <strong><strike>$19.99</strike></strong> $14.99!', 'acm' ) . '</p>';
+			echo	'</div>
+				</div>';
+
+		}
+
+		do_action( 'acm_after_table', $this );
 
 	}
 
@@ -161,6 +188,21 @@ class ACMmain {
 		echo	'</div>
 			</div>';
 
+		$this->settings_array = apply_filters( 'acm_settings', $this->settings_array );
+
+		if ( ! empty( $this->settings_array ) ) {
+			
+			echo '<div id="settings" class="postbox ">
+					<h3>'.__('Settings', 'acm').'</h3>
+					<div class="inside">
+						<form id="acm-save-settings-form" data-nonce="' . wp_create_nonce( 'acm_save_settings' ) . '">';
+						$this->display_settings_widget();
+				echo   '</form>
+					</div>
+				</div>';
+
+		}
+		
 		echo '<div id="popslide" class="postbox ">
 				<h3>'.__('Check this out!', 'acm').'</h3>
 				<div class="inside">';
@@ -179,6 +221,56 @@ class ACMmain {
 		echo '<p>';
 			_e('Important - WordPress Cron is depended on the User. WP Cron fires <strong>only on the page visit</strong> so it can be not accurate.', 'acm');
 		echo '</p>';
+
+	}
+
+	public function display_settings_widget() {
+
+		foreach ( $this->settings_array as $key => $setting ) {
+			
+			echo '<p>';
+
+				if ( isset( $setting['label'] ) && ! empty( $setting['label'] ) ) {
+					echo '<label for="acm-setting-' . $key . '">' . $setting['label'] . '<br>';
+				}
+
+					switch ( $setting['type'] ) {
+						case 'text':
+						case 'hidden':
+						case 'number':
+							$value = empty( $this->settings[ $key ] ) ? $setting['default'] : $this->settings[ $key ];
+							$class = empty( $setting['class'] ) ? '' : $setting['class']; 
+							$placeholder = empty( $setting['placeholder'] ) ? '' : $setting['placeholder']; 
+							echo '<input type="' . $setting['type'] . '" class="' . $class . '" name="' . $key . '" id="acm-setting-' . $key . '" placeholder="' . $placeholder . '" value="' . $value . '">';
+							break;
+
+						case 'checkbox':
+							$checked = empty( $this->settings[ $key ] ) ? $setting['default'] : $this->settings[ $key ];
+							$class = empty( $setting['class'] ) ? '' : $setting['class']; 
+							echo '<input type="' . $setting['type'] . '" class="' . $class . '" name="' . $key . '" id="acm-setting-' . $key . '" value="true" ' . checked( true, $checked, false ) . '>';
+							break;
+
+						case 'button':
+							$class = empty( $setting['class'] ) ? '' : $setting['class']; 
+							$id = empty( $setting['id'] ) ? '' : $setting['id']; 
+							$data = empty( $setting['data'] ) ? '' : $setting['data']; 
+							echo '<button class="' . $class . '" id="' . $id . '" ' . $data . '>' . $setting['text'] . '</button>';
+							break;
+						
+						default:
+							echo '';
+							break;
+					}
+
+				if ( isset( $setting['label'] ) && ! empty( $setting['label'] ) ) {
+					echo '</label>';
+				}
+
+			echo '</p>';
+
+		}
+
+		echo '<div class="field go"><button id="acm-save-settings" class="button button-secondary">' . __( 'Save', 'acm' ) . '</button></div>';
 
 	}
 
@@ -378,5 +470,3 @@ class ACMmain {
 	}
 
 }
-
-?>

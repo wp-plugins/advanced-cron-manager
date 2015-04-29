@@ -116,3 +116,18 @@
 	}
 
 }
+
+#acm-pro {
+	margin-top: 20px;
+}
+
+.placeholder-div {
+	text-align: center;
+	color: #888;
+}
+
+.placeholder-div a {
+	font-size: 1.3em;
+	text-decoration: none;
+	color: #888;
+}

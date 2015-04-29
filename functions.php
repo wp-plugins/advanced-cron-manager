@@ -3,18 +3,6 @@
  * Common ACM functions
  */
 
-/**
- * Prints array in readable way
- * @param  array $a
- * @param  string $name
- * @return void
- */
-function acm_pr($a, $name = '') {
-	echo '<pre>'.$name.' ';
-	print_r($a);
-	echo '</pre>';
-}
-
 function acm_get_cron_hash($name, $timestamp, $args, $itv) {
 	return substr(md5($name.$timestamp.implode(':', $args).$itv), 0, 8);
 }
@@ -41,4 +29,8 @@ function acm_get_next_cron_execution($timestamp) {
 
 }
 
-?>
+function acm_format_time( $timestamp ) {
+
+	return '<span title="' . human_time_diff( current_time('timestamp'), $timestamp ) . ' ' . __( 'ago', 'acm' ) . '">' . date("d.m.Y H:i:s", $timestamp) . '</span>';
+
+}

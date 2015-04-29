@@ -7,12 +7,16 @@ class ACMajax {
 
 	public function __construct() {
 
-		add_action('wp_ajax_add_schedule', array($this, 'add_schedule'));
-		add_action('wp_ajax_remove_schedule', array($this, 'remove_schedule'));
+		add_action('wp_ajax_acm_add_schedule', array($this, 'add_schedule'));
+		add_action('wp_ajax_acm_remove_schedule', array($this, 'remove_schedule'));
 
-		add_action('wp_ajax_add_task', array($this, 'add_task'));
-		add_action('wp_ajax_remove_task', array($this, 'remove_task'));
-		add_action('wp_ajax_execute_task', array($this, 'execute_task'));
+		add_action('wp_ajax_acm_add_task', array($this, 'add_task'));
+		add_action('wp_ajax_acm_remove_task', array($this, 'remove_task'));
+		add_action('wp_ajax_acm_execute_task', array($this, 'execute_task'));
+
+		add_action('wp_ajax_acm_save_settings', array($this, 'save_settings'));
+
+		add_action('wp_ajax_acm_deactivate_license', array($this, 'deactivate_license'));
 
 	}
 
@@ -191,6 +195,114 @@ class ACMajax {
 
 	}
 
-}
+	public function save_settings() {
 
-?>
+		$params = $_REQUEST;
+
+		// Return error when noonce doesn't match
+		if ( !wp_verify_nonce($params['nonce'], 'acm_save_settings') )
+			die( json_encode( array('status' => 'error', 'details' => __('Sorry, wrong noonce.', 'acm')) ) );
+
+		$settings = array();
+		parse_str( $params['fields'], $settings );
+
+		// checkbox fix
+		if ( ! isset( $settings['log'] ) ) {
+			$settings['log'] = false;
+		} else {
+			$settings['log'] = true;
+		}
+
+		$refresh = false;
+
+		// license handle
+		if ( isset( $settings['license'] )  && ! empty( $settings['license'] ) ) {
+
+			$api_params = array( 
+				'edd_action'=> 'activate_license', 
+				'license' 	=> $settings['license'], 
+				'item_name' => urlencode( ACMPRO_NAME ),
+				'url'       => home_url()
+			);
+			
+			$response = wp_remote_get( add_query_arg( $api_params, ACMPRO_STORE_URL ), array( 'timeout' => 15, 'sslverify' => false ) );
+
+			if ( is_wp_error( $response ) )
+				die( json_encode( array('status' => 'error', 'details' => __('Couldn\'t activate your license file. Please try again.', 'acm')) ) );
+
+			$license_data = json_decode( wp_remote_retrieve_body( $response ) );
+			
+			if (  ! isset( $license_data->license ) || $license_data->license != 'valid' ) {
+				die( json_encode( array('status' => 'error', 'details' => __('Wrong license key. Please ensure you entered correct one.', 'acm')) ) );
+			}
+
+			$refresh = true;
+
+		}
+
+		update_option( 'acm_settings', $settings );
+
+		die( json_encode( array(
+			'status' => 'success',
+			'refresh' => $refresh
+		) ) );
+
+	}
+
+	public function deactivate_license() {
+
+		$params = $_REQUEST;
+
+		// Return error when noonce doesn't match
+		if ( !wp_verify_nonce($params['nonce'], 'acm_deactivate_license') )
+			die( json_encode( array('status' => 'error', 'details' => __('Sorry, wrong noonce.', 'acm')) ) );
+
+		$settings = get_option( 'acm_settings' );
+
+		$refresh = false;
+
+		if ( isset( $settings['license'] )  && ! empty( $settings['license'] ) ) {
+
+			$api_params = array( 
+				'edd_action'=> 'deactivate_license', 
+				'license' 	=> $settings['license'], 
+				'item_name' => urlencode( ACMPRO_NAME ),
+				'url'       => home_url()
+			);
+			
+			$response = wp_remote_get( add_query_arg( $api_params, ACMPRO_STORE_URL ), array( 'timeout' => 15, 'sslverify' => false ) );
+
+			if ( is_wp_error( $response ) )
+				die( json_encode( array('status' => 'error', 'details' => __('Sorry, something goes wrong.', 'acm')) ) );
+
+			$license_data = json_decode( wp_remote_retrieve_body( $response ) );
+			
+			if ( $license_data->license == 'deactivated' ) {
+
+				unset( $settings['license'] );
+				update_option( 'acm_settings', $settings );
+
+				$refresh = true;
+
+				die( json_encode( array(
+					'status' => 'success',
+					'refresh' => $refresh
+				) ) );
+
+			} else {
+
+				die( json_encode( array('status' => 'error', 'details' => __('License couldn\'t be deactivated. Please try again.', 'acm')) ) );
+
+			}
+
+		} else {
+
+			die( json_encode( array('status' => 'error', 'details' => '') ) );
+
+		}
+
+		update_option( 'acm_settings', $settings );
+
+	}
+
+}

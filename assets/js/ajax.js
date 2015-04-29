@@ -7,7 +7,7 @@ jQuery(document).ready(function($) {
 		event.preventDefault();
 
 		var data = {
-			action: 'add_schedule',
+			action: 'acm_add_schedule',
 			interval: $('#interval').val(),
 			name: $('#name').val(),
 			display: $('#nice_name').val(),
@@ -58,6 +58,83 @@ jQuery(document).ready(function($) {
 
 
 
+	// Save settings
+
+	$( "#acm-save-settings-form" ).on('submit', function( event ) {
+
+		event.preventDefault();
+
+		var data = {
+			action: 'acm_save_settings',
+			fields: $(this).serialize(),
+			nonce: $(this).data('nonce')
+		};
+
+		$.post(ajaxurl, data, function(response) {
+			
+			var ret = $.parseJSON(response);  
+
+			if (ret.status == 'success') {
+
+				// Show notification
+				$("#notif-settings-saved").slideDown('slow').delay(3000).slideUp('slow');
+
+				if (ret.refresh == true) {
+					location.reload();
+				}
+
+			} else if (ret.status == 'error') {
+
+				// Show error
+				$("#notif-flex > p >strong").html(ret.details);
+				$("#notif-flex").slideDown('slow').delay(3000).slideUp('slow');
+
+			}
+
+		});
+
+	});
+
+
+
+	// Deactivate license
+
+	$( "#acm-deactivate-license" ).on('click', function( event ) {
+
+		event.preventDefault();
+
+		var data = {
+			action: 'acm_deactivate_license',
+			nonce: $(this).data('nonce')
+		};
+
+		$.post(ajaxurl, data, function(response) {
+			
+			var ret = $.parseJSON(response);  
+
+			if (ret.status == 'success') {
+
+				// Show notification
+				$("#notif-license-deactivated").slideDown('slow').delay(3000).slideUp('slow');
+
+				if (ret.refresh == true) {
+					location.reload();
+				}
+
+			} else if (ret.status == 'error') {
+
+				// Show error
+				$("#notif-flex > p >strong").html(ret.details);
+				$("#notif-flex").slideDown('slow').delay(3000).slideUp('slow');
+
+			}
+
+		});
+
+	});
+
+
+
 	// Remove schedule AJAX
 
 	$( ".remove-schedule" ).live('click', function() {
@@ -67,7 +144,7 @@ jQuery(document).ready(function($) {
 		};
 
 		var data = {
-			action: 'remove_schedule',
+			action: 'acm_remove_schedule',
 			name: $(this).data('schedule'),
 			noonce: $(this).data('noonce')
 		};
@@ -116,7 +193,7 @@ jQuery(document).ready(function($) {
 		args = args.slice(1);
 
 		var data = {
-			action: 'add_task',
+			action: 'acm_add_task',
 			hook: $('#schedule_hook').val(),
 			offset: $('#timestamp_offset').val(),
 			schedule: $('#select-schedule').val(),
@@ -173,7 +250,7 @@ jQuery(document).ready(function($) {
 		var remove_button = $(this);
 
 		var data = {
-			action: 'remove_task',
+			action: 'acm_remove_task',
 			task: $(this).data('task'),
 			interval: $(this).data('interval'),
 			args: $(this).data('args'),
@@ -213,7 +290,7 @@ jQuery(document).ready(function($) {
 	$( ".execute-task" ).live('click', function() {
 
 		var data = {
-			action: 'execute_task',
+			action: 'acm_execute_task',
 			task: $(this).data('task'),
 			args: $(this).data('args'),
 			noonce: $(this).data('noonce')
