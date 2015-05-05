@@ -14,7 +14,9 @@ Advanced manager for WordPress Cron tasks and schedules. Adding, removing and vi
 
 **PRO version now available!**
 
-Log cron executions easly. Until 1 June 2015 -$5 off!
+Log cron executions easily. Until 1 June 2015 -$5 off!
+
+[Buy now](http://underdev.it/downloads/advanced-cron-manager-pro/ "Advanced Cron Manager PRO")
 
 **Advanced Cron Manager**
 
