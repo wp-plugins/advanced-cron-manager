@@ -12,14 +12,6 @@ Advanced manager for WordPress Cron tasks and schedules. Adding, removing and vi
 
 == Description ==
 
-**PRO version now available!**
-
-Log cron executions easily. Until 1 June 2015 -$5 off!
-
-[Buy now](http://underdev.it/downloads/advanced-cron-manager-pro/ "Advanced Cron Manager PRO")
-
-**Advanced Cron Manager**
-
 This plugin allow you to manage WP Cron tasks:
 
 * viewing
@@ -27,6 +19,14 @@ This plugin allow you to manage WP Cron tasks:
 * adding tasks and schedules
 
 Plugin use AJAX request so you'll need enabled Javascript in order to use it.
+
+**Advanced Cron Manager PRO**
+
+PRO version includes
+
+* Cron Logger - log cron executions easly
+
+[Buy now](http://underdev.it/downloads/advanced-cron-manager-pro/ "Advanced Cron Manager PRO") and get $5 off until 1 June 2015!
 
 **Informations about WP Cron**
 
