@@ -26,7 +26,7 @@ PRO version includes
 
 * Cron Logger - log cron executions easly
 
-[Buy now](http://underdev.it/downloads/advanced-cron-manager-pro/ "Advanced Cron Manager PRO") and get $5 off until 1 June 2015!
+[Buy now](http://underdev.it/downloads/advanced-cron-manager-pro/ "Advanced Cron Manager PRO")
 
 **Informations about WP Cron**
 
